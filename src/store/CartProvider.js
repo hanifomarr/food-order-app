@@ -7,17 +7,27 @@ const defaultCartState = {
 };
 
 const cartReducer = (state, action) => {
-  if (action.type === "ADD") {
-    const updatedItems = state.items.concat(action.item);
-    const updatedTotalAmount =
-      state.totalAmount + action.item.price * action.item.amount;
-
-    return {
-      items: updatedItems,
-      totalAmount: updatedTotalAmount,
-    };
+  switch (action.type) {
+    case "ADD":
+      let updatedItems;
+      if (state.items.find((item) => item.id === action.item.id)) {
+        updatedItems = state.items.map((item) =>
+          item.id === action.item.id
+            ? { ...item, amount: item.amount + action.item.amount }
+            : item
+        );
+      } else {
+        updatedItems = [...state.items, action.item];
+      }
+      return {
+        items: updatedItems,
+        totalAmount: state.totalAmount + action.item.price * action.item.amount,
+      };
+    case "REMOVE":
+      return;
+    default:
+      return defaultCartState;
   }
-  return defaultCartState;
 };
 
 function CartProvider({ children }) {
@@ -35,7 +45,7 @@ function CartProvider({ children }) {
 
   const cartContext = {
     item: cartState.items,
-    totalAmount: 0,
+    totalAmount: cartState.totalAmount,
     addItem: addItemHandler,
     removeItem: removeItemHandler,
   };
