@@ -10,8 +10,12 @@ function Cart({ onClick }) {
   const totalAmount = CartCtx.totalAmount.toFixed(2);
   const hasItems = CartCtx.item.length > 0;
 
-  const addItemHandler = (item) => {};
-  const removeItemHandler = (id) => {};
+  const addItemHandler = (item) => {
+    CartCtx.addItem({ ...item, amount: 1 });
+  };
+  const removeItemHandler = (id) => {
+    CartCtx.removeItem(id);
+  };
 
   const cartItems = (
     <ul className={classes["cart-items"]}>
@@ -21,8 +25,8 @@ function Cart({ onClick }) {
           name={item.name}
           price={item.price}
           amount={item.amount}
-          onAddItem={addItemHandler}
-          onRemoveItem={removeItemHandler}
+          onAddItem={addItemHandler.bind(null, item)}
+          onRemoveItem={removeItemHandler.bind(null, item.id)}
         />
       ))}
     </ul>
