@@ -23,6 +23,22 @@ function Cart({ onClick }) {
     setIsCheckout(true);
   };
 
+  const submitOrderHandler = async (userData) => {
+    const res = await fetch(
+      "https://react-http-1808d-default-rtdb.firebaseio.com/orders.json",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userData: userData,
+          orderItems: CartCtx.item,
+        }),
+      }
+    );
+
+    const body = await res.json();
+    console.log("🚀 ~ file: Cart.js:39 ~ submitOrderHandler ~ body:", body);
+  };
+
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {CartCtx.item.map((item) => (
@@ -59,7 +75,9 @@ function Cart({ onClick }) {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onClick={onClick} />}
+      {isCheckout && (
+        <Checkout onClick={onClick} onSubmitUserData={submitOrderHandler} />
+      )}
       {!isCheckout && orderButton}
     </Modal>
   );
