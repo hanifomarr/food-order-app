@@ -11,7 +11,7 @@ function MealList() {
   const fetchMeals = useCallback(async () => {
     try {
       const res = await fetch(
-        "https://react-http-1808d-default-rtdb.firebaseio.com/meals"
+        "https://react-http-1808d-default-rtdb.firebaseio.com/meals.json"
       );
       if (!res.ok) {
         throw new Error("Something went wrong!");
